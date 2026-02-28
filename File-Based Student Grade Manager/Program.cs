@@ -3,6 +3,8 @@ using System.Linq.Expressions;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Transactions;
+using System.Xml.Schema;
+using System.Windows.Forms;
 
 class Program
 {
@@ -10,25 +12,28 @@ class Program
     private static StudentService service = new(FilePath);
     private static List<StudentModel> students = service.LoadStudents();
 
+    private const int Max = 6;
+    private const int Min = 0;
+
     private static Dictionary<int, Action> Actions = new()
     {
         {1, DisplayStudents },
         {2, AddStudent },
         {3, DisplayStudentsAverage },
         {4, EditStudent },
-        {5, DeleteStudent }
+        {5, DeleteStudent },
+        {6, ExportToCsvFile }
     };
 
+    [STAThread]
     public static void Main()
     {
-
-
 
         while (true)
         {
             Menu();
             Console.WriteLine("Enter your Choice");
-            int Choice = ValidateInput<int>(c => c is < 0 or > 5);
+            int Choice = ValidateInput<int>(c => c is < Min or > Max);
 
             Console.Clear();
 
@@ -108,6 +113,7 @@ class Program
         Console.WriteLine("3. See a Student's Grade");
         Console.WriteLine("4. Edit a Student");
         Console.WriteLine("5. Delete a Student");
+        Console.WriteLine("6. Export All Students as a CSV File");
     }
 
     public static StudentModel CreateStudent()
@@ -171,6 +177,21 @@ class Program
         }
 
         return result;
+    }
+
+    public static void ExportToCsvFile()
+    {
+        using (var sfd = new SaveFileDialog())
+        {
+
+            sfd.Filter = "CSV files (*.csv)|*.csv";
+            sfd.FileName = "students.csv";
+
+            if (sfd.ShowDialog() != DialogResult.OK)
+                return;
+
+            service.ExportToCsv(students, sfd.FileName);
+        }
     }
 
 }

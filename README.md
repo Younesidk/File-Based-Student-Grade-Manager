@@ -15,6 +15,7 @@ A simple console application built in **C# / .NET 10** that lets you manage stud
 | 3 | View a student's grade average |
 | 4 | Edit an existing student |
 | 5 | Delete a student |
+| 6 | Export all students to a CSV file |
 | 0 | Exit |
 
 ---
@@ -55,6 +56,20 @@ Records are stored in `students.txt` as comma-separated values:
 
 ---
 
+## 📤 CSV Export
+
+Choosing option **6** opens a **Save File Dialog** (Windows Forms) that lets you pick any location and file name on your machine. The exported `.csv` includes a header row followed by all student records:
+
+```
+id,FirstName,LastName,Age,Exam1,Exam2,Exam3
+1,John,Doe,21,18.5,16,19
+2,Jane,Smith,22,20,17.5,15
+```
+
+> ⚠️ The export writes to the file path you choose in the dialog — it does **not** overwrite `students.txt`.
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -77,3 +92,4 @@ dotnet run
 - **Framework:** .NET 10
 - **Storage:** Flat file (`students.txt`)
 - **I/O:** `System.IO.File`
+- **UI Dialog:** `System.Windows.Forms.SaveFileDialog` (CSV export)

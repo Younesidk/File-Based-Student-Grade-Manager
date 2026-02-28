@@ -15,6 +15,9 @@ public class StudentService
 
     public List<StudentModel> LoadStudents()
     {
+        if (!File.Exists(FilePath))
+            return new();
+
         var FileContent = File.ReadAllLines(FilePath);
 
         List<StudentModel> students = new();
@@ -101,5 +104,33 @@ public class StudentService
 
         Students.RemoveAll(s => s.ID == ID);
         SaveStudents(Students);
+    }
+
+    public void ExportToCsv(List<StudentModel> students,string FilePath)
+    {
+        try
+        {
+            using (var writer = new StreamWriter(FilePath))
+            {
+                writer.WriteLine("id,FirstName,LastName,Age,Exam1,Exam2,Exam3");
+
+                foreach (var s in students)
+                {
+                    writer.WriteLine(s);
+                }
+            }
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            Console.WriteLine($"You Don't Have the Right to write here {ex.Message}");
+        }
+        catch (IOException ex)
+        {
+            Console.WriteLine($"There was an Input/Output Exception {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected Exception");
+        }
     }
 }
