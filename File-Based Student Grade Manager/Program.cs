@@ -70,7 +70,9 @@ class Program
     {
         var student = GetStudentID("To Get his Average");
 
-        Console.WriteLine($"The Student's Average is : {student.Average}");
+        Console.Clear();
+
+        Console.WriteLine($"The Student : {student} \nAverage is : {student.Average}");
     }
 
     public static void EditStudent()
